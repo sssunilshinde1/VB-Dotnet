@@ -1,1 +1,4 @@
 dotnet new console --language VB
+
+
+dotnet new console --language VB -o MyNewVBApp -n MyNewVBApp
