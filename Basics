@@ -3,3 +3,7 @@ dotnet new console --language VB
 OR
 (Optional) Specify a project name and output directory.
 dotnet new console --language VB -o MyNewVBApp -n MyNewVBApp
+
+
+Create WinForm Application
+dotnet new winforms --language VB
