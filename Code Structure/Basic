@@ -14,3 +14,5 @@ End Module
 Variables: Learn to declare variables to store different types of data, such as String for text and Integer for whole numbers.
 Dim brand As String = "Apple"
 Dim num1 As Integer = 10
+
+In VB.NET, the Dim keyword is an abbreviation for Dimension. 
