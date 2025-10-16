@@ -1,0 +1,10 @@
+Module Program: Defines a container for your code.
+Sub Main(): The entry point for your application. The code inside this block will run when you start the program.
+
+Module Program
+    Sub Main()
+        Console.WriteLine("Hello, world!")
+        Console.WriteLine("Press any key to continue...")
+        Console.ReadKey(True)
+    End Sub
+End Module
