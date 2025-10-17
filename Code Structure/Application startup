@@ -7,4 +7,25 @@ Application startup
 6) Form_Load event: This event fires before the form is displayed for the first time. It is the best place to run application-specific initialization logic, such as populating data or setting initial control states.
 7) VisibleChanged event: Occurs when the form's Visible property changes, in this case, when it is being made visible.
 8) Activated event: Occurs when the form becomes the active window, either by code or by user interaction. This will happen automatically for the main form when the application starts.
-9) Shown event: This is the very last event in the startup sequence, fired after the form is fully visible and painted for the first time
+9) Shown event: This is the very last event in the startup sequence, fired after the form is fully visible and painted for the first time.
+
+
+Active user interaction
+This phase involves events triggered by user actions or changes within the application while it is running.
+1) Focus events: Events like Enter, Leave, GotFocus, and LostFocus fire as the user navigates between controls.
+2) Mouse events: Actions like clicking, moving, or hovering the mouse over a control trigger events such as MouseClick, MouseEnter, and MouseLeave.
+3) Keyboard events: Key presses or releases trigger KeyDown, KeyUp, and KeyPress events.
+4) Painting and layout events: The Paint event is triggered when a control is redrawn, while Layout events fire when the form's layout changes.
+5) Interaction with other forms: For applications with multiple forms, events like Activated and Deactivate fire as the user switches between them. 
+
+Application shutdown
+This phase handles the orderly closing of the application, freeing up resources, and saving data. 
+1) Form_Closing event: This event is fired just before a form is closed. The event handler receives a FormClosingEventArgs object, which allows you to cancel the closing process if needed (for example, to prompt the user to save unsaved data).
+2) Form_Closed event: This event is fired after the form has been closed and destroyed. It's the last event you can handle before the form instance is gone.
+3) Application.Exit: The main message loop is closed, and the application exits.
+4) Dispose method: The Dispose method on the form and its child controls is called to release any unmanaged resources. This happens after the form has been closed.
+5) Garbage collection: The .NET garbage collector automatically reclaims the memory used by the form and other objects when they are no longer in use. 
+
+
+
+
