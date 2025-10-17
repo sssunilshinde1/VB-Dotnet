@@ -1,0 +1,218 @@
+Imports System
+Imports System.Text.Json
+Imports System.IO
+Imports System.Collections.Generic
+
+Module Program
+
+    ' You will need to add a reference to the System.Text.Json package.
+    ' You can do this by running `dotnet add package System.Text.Json` in your project's directory.
+
+    Public Sub Main()  ' Removed Shared
+        Dim allEmployees = GenerateEmployeeData()
+
+        ' Write the serialized JSON to a file
+        Try
+            Dim options As New JsonSerializerOptions With {
+                .WriteIndented = True,
+                .DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+            }
+            Dim jsonString As String = JsonSerializer.Serialize(allEmployees, options)
+            File.WriteAllText("employees.json", jsonString)
+            Console.WriteLine("Generated 200 employee records and saved to employees.json")
+        Catch ex As Exception
+            Console.WriteLine($"An error occurred during JSON serialization: {ex.Message}")
+        End Try
+
+        ' Read the generated JSON file and print the employee details
+        ReadAndPrintJsonFile("employees.json")
+    End Sub
+
+    Public Sub ReadAndPrintJsonFile(filePath As String)  ' Removed Shared
+        Try
+            ' Read the entire file content into a string
+            Dim jsonString As String = File.ReadAllText(filePath)
+
+            ' Deserialize the JSON string into a list of Employee objects
+            Dim options As New JsonSerializerOptions With {
+                .PropertyNameCaseInsensitive = True
+            }
+            Dim employees As List(Of Employee) = JsonSerializer.Deserialize(Of List(Of Employee))(jsonString, options)
+
+            If employees IsNot Nothing Then
+                Console.WriteLine("Printing Employee Data from JSON file:")
+                Console.WriteLine("_____________________________________")
+
+                ' Loop through the deserialized objects and print their details
+                For Each emp As Employee In employees
+                    Console.WriteLine($"Employee ID: {emp.Id}, Name: {emp.Name}")
+
+                    If emp.Roles IsNot Nothing Then
+                        For Each role As Role In emp.Roles
+                            Console.WriteLine($"  Role: {role.Type.ToString()}")
+                        Next
+                    End If
+
+                    If emp.Permissions IsNot Nothing Then
+                        For Each perm As Permission In emp.Permissions
+                            If perm.Resource IsNot Nothing Then
+                                Console.WriteLine($"  Permission: {perm.Resource.Name}, Access Level: {perm.AccessLevel}")
+                            End If
+                        Next
+                    End If
+                    Console.WriteLine() ' Add a blank line for readability
+                Next
+            End If
+        Catch ex As FileNotFoundException
+            Console.WriteLine($"Error: The file '{filePath}' was not found. Please run the JSON generation code first.")
+        Catch ex As Exception
+            Console.WriteLine($"An error occurred while reading the JSON file: {ex.Message}")
+        End Try
+    End Sub
+
+    Public Function GenerateEmployeeData() As List(Of Employee)  ' Removed Shared
+        Dim employeeNames As New List(Of String) From {
+            "Aarav Sharma", "Olivia Chen", "Noah Williams", "Sofia Rodriguez", "Leo Kim", "Isla Patel", "Lucas Silva",
+            "Amelia Jones", "Muhammad Khan", "Helena Costa", "Oliver Brown", "Charlotte Miller", "Vihaan Singh",
+            "Jade Martin", "Matteo Rossi", "Fatima Ahmed", "Elias Weber", "Luna Ito", "Santiago Gomez", "Alice Wilson",
+            "Ethan Davis", "Mila Perez", "Benjamin Hall", "Maya Lopez", "Sebastian Gonzalez", "Zoe Lee", "Arthur Moore",
+            "Camila Garcia", "Ivan Petrov", "Elisa Costa", "Jack Taylor", "Ella Brown", "Theodore White", "Chloe Wong",
+            "Liam Wilson", "Ava Martinez", "Henry Smith", "Sophia Hernandez", "Alexander Johnson", "Freya Walker",
+            "Ibrahim Ali", "Ambre Dubois", "Haruto Tanaka", "Aria Williams", "Daniel Perez", "Valentina Lopez",
+            "Heitor Santos", "Priya Singh", "Andrei Popov", "Grace Lee", "Gael Fernandez", "Emma White",
+            "Gabriel D'Souza", "Yuna Kim", "Oscar Hansen", "Zahra Hussain", "Emil Schmidt", "Chiara Bianchi",
+            "Davi Souza", "Lina Dubois", "James Taylor", "Jasmine Roberts", "Ivan Ivanov", "Olena Kowalski",
+            "Mateo Garcia", "Rin Sato", "Max Schwarz", "Isabella Gomez", "Yusuf Hassan", "Svetlana Petrova",
+            "Diego Ramirez", "Chloe Clark", "Thomas Hall", "Mia Davis", "Julian Singh", "Tsumugi Nakamura",
+            "David Fernandez", "Amara Green", "Arjun Patel", "Elodie Lefevre", "Hugo Martin", "Lia Torres",
+            "Mohammed Siddiqui", "Evelyn Brown", "Kai Yamamoto", "Natalia Gomez", "Felix Keller", "Ines Martinez",
+            "Pedro Mendes", "Yasmin Khan", "Luis Vargas", "Rose Martin", "Oscar Taylor", "Chloe Davis",
+            "Samuel Jackson", "Manuela Garcia", "Bruno Oliveira", "Nia Jones", "Rafael Santos", "Jia Li",
+            "Andres Torres", "Amira Khan", "Ethan Smith", "Sara Hansen", "Yuki Tanaka", "Isabelle Bernard",
+            "Leon Muller", "Mia Kowalski", "Ahmed Hassan", "Anna Ivanova", "Manuel Lopez", "Elina Petrov",
+            "Leo Weber", "Nao Suzuki", "Oscar Diaz", "Maya Schmidt", "Sebastian Kim", "Ivy Brown", "Harish Patel",
+            "Luna Martin", "Julian Garcia", "Charlotte Davis", "Daniel Wilson", "Sofia Wong", "Ricardo Sanchez",
+            "Aurora Silva", "Carlos Mendez", "Emilia Rossi", "Vikram Singh", "Isla Dubois", "Maxine Thomas",
+            "Amelia Baker", "Ben Carter", "Chloe Johnson", "David Chen", "Freya Peterson", "George Wilson",
+            "Grace Miller", "Harry Brown", "Hannah Lee", "Jacob Martin", "Lucy Davis", "Leo King", "Lily Clark",
+            "Michael Evans", "Mia Hall", "Oliver Wright", "Olivia Green", "Paul Adams", "Poppy White",
+            "Frank White", "Rajesh Kumar", "Sana Khan", "Tom Wilson", "Yasmine Ali", "Chris Jones", "Nina Sharma",
+            "Felix Wright", "Zara Patel", "Daniel Brown", "Emily Davis", "Hugo Martin", "Isabel Garcia",
+            "Javier Torres", "Lola Sanchez", "Martin Perez", "Nicole King", "Oscar Ramirez", "Paola Gomez",
+            "Quinn Taylor", "Roberto Lee", "Sofia White", "Thiago Silva", "Ursula Diaz", "Vicente Chavez",
+            "Wendy Garcia", "Xavier Lopez", "Yara Morales", "Zachary Ramirez", "Ana Sanchez", "Ben Torres",
+            "Carla Lopez", "David Flores", "Elena Romero", "Fernando Vargas", "Gloria Ramirez", "Hector Perez",
+            "Irene Garcia", "Jose Martinez", "Karla Rodriguez", "Luis Chavez", "Maria Fernandez", "Nicolas Diaz",
+            "Olivia Vargas", "Pablo Sanchez", "Quetzalli Cruz", "Raul Torres", "Sara Ruiz", "Tomas Vargas",
+            "Veronica Reyes", "Juan Gutierrez", "Gabriela Castro", "Carlos Ramirez", "Mariana Ochoa", "Pedro Navarro",
+            "Valeria Torres", "Andres Moreno", "Silvia Pineda", "Julian Castro", "Fernanda Ortiz", "Javier Morales",
+            "Alejandra Rojas", "Gustavo Herrera", "Diana Mendoza", "Felipe Castillo", "Catalina Salazar",
+            "Eduardo Reyes", "Patricia Valdes"
+        }
+
+        ' Resources
+        Dim reportPage As New Resource With {.Id = 1, .Name = "Reports", .Type = ResourceType.Page}
+        Dim dashboardPage As New Resource With {.Id = 2, .Name = "Dashboard", .Type = ResourceType.Page}
+        Dim customerModule As New Resource With {.Id = 3, .Name = "Customer Management", .Type = ResourceType.Page}
+        Dim inventoryModule As New Resource With {.Id = 4, .Name = "Inventory", .Type = ResourceType.Page}
+
+        ' Create 15 roles using the enum for meaningful types
+        Dim roles As New List(Of Role)()
+        Dim lastRole As Role = Nothing
+        For i As Integer = 0 To 14
+            Dim role As New Role With {
+                .Id = i + 1,
+                .Type = CType(i, RoleType),
+                .ParentRole = lastRole
+            }
+            roles.Add(role)
+            lastRole = role
+        Next
+
+        Dim employees As New List(Of Employee)()
+        For i As Integer = 1 To 200
+            Dim employee As New Employee With {
+                .Id = i,
+                .Name = employeeNames(i - 1),
+                .Roles = New List(Of Role) From {roles((i - 1) Mod 15)},
+                .Permissions = New List(Of Permission)()
+            }
+
+            ' Assign permissions based on employee ID ranges
+            If i <= 50 Then
+                employee.Permissions.Add(New Permission With {.Resource = reportPage, .AccessLevel = AccessLevel.Read})
+            ElseIf i <= 100 Then
+                employee.Permissions.Add(New Permission With {.Resource = dashboardPage, .AccessLevel = AccessLevel.Full})
+                employee.Permissions.Add(New Permission With {.Resource = reportPage, .AccessLevel = AccessLevel.Read})
+            ElseIf i <= 150 Then
+                employee.Permissions.Add(New Permission With {.Resource = reportPage, .AccessLevel = AccessLevel.Full})
+                employee.Permissions.Add(New Permission With {.Resource = customerModule, .AccessLevel = AccessLevel.Write})
+            Else
+                employee.Permissions.Add(New Permission With {.Resource = customerModule, .AccessLevel = AccessLevel.Full})
+                employee.Permissions.Add(New Permission With {.Resource = inventoryModule, .AccessLevel = AccessLevel.Full})
+                employee.Permissions.Add(New Permission With {.Resource = reportPage, .AccessLevel = AccessLevel.Full})
+            End If
+
+            employees.Add(employee)
+        Next
+        Return employees
+    End Function
+
+End Module
+
+' The rest of your classes and enums remain unchanged:
+Public Enum RoleType
+    Employee
+    Manager
+    Supervisor
+    TeamLead
+    DepartmentHead
+    Director
+    Executive
+    Admin
+    HRSpecialist
+    ITSupport
+    SalesRepresentative
+    MarketingCoordinator
+    FinanceAnalyst
+    OperationsManager
+    CEO
+End Enum
+
+Public Enum AccessLevel
+    None
+    Read
+    Write
+    Delete
+    Full
+End Enum
+
+Public Enum ResourceType
+    Page
+    API
+    Report
+End Enum
+
+Public Class Employee
+    Public Property Id As Integer
+    Public Property Name As String = String.Empty
+    Public Property Roles As New List(Of Role)
+    Public Property Permissions As New List(Of Permission)
+End Class
+
+Public Class Role
+    Public Property Id As Integer
+    Public Property Type As RoleType
+    Public Property ParentRole As Role
+End Class
+
+Public Class Resource
+    Public Property Id As Integer
+    Public Property Name As String = String.Empty
+    Public Property Type As ResourceType = ResourceType.Page
+End Class
+
+Public Class Permission
+    Public Property Resource As Resource
+    Public Property AccessLevel As AccessLevel = AccessLevel.Read
+End Class
