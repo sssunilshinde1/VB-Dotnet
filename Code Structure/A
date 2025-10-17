@@ -1,1 +1,50 @@
+Button and Label
+
+When is Me used?
+To be explicit and improve readability: It's good practice to use Me to explicitly indicate that you are referring to a member of the current object. 
+
+Is Me always necessary?
+No. In most cases, if you omit Me, the compiler will automatically assume you are referring to the current instance. 
+For example, Text = "Hello World App" would work just as well in your code.
+
+
+Public Class Form1
+    Inherits Form
+
+    ' Declare controls at the class level
+    Private WithEvents btnClickMe As Button
+    Private WithEvents lblHelloWorld As Label
+
+    Public Sub New()
+        ' This call is required by the Windows Form Designer.
+        InitializeComponent()
+        ' Add any initialization after the InitializeComponent() call.
+    End Sub
+
+    ' The Form_Load event handler
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Me.Text = "Hello World App"
+        Text = "Hello World App"
+        Me.Size = New System.Drawing.Size(300, 200)
+
+        ' Create and configure a new Button control
+        btnClickMe = New Button()
+        btnClickMe.Text = "Click this button"
+        btnClickMe.Location = New System.Drawing.Point(80, 50)
+        Me.Controls.Add(btnClickMe)
+
+        ' Create and configure a new Label control
+        lblHelloWorld = New Label()
+        lblHelloWorld.Text = "Label1"
+        lblHelloWorld.Location = New System.Drawing.Point(80, 100)
+        Me.Controls.Add(lblHelloWorld)
+        Me.MaximizeBox = true
+    End Sub
+
+    ' The event handler for the button click
+    Private Sub btnClickMe_Click(sender As Object, e As EventArgs) Handles btnClickMe.Click
+        lblHelloWorld.Text = "Hello World!"
+    End Sub
+
+End Class
 
