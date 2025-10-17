@@ -1,0 +1,4 @@
+Difference between initialise compoenent and FormLoad ?
+InitializeComponent and the Form_Load event serve different purposes and run at different times during a Windows Forms application's startup.
+InitializeComponent is a method that constructs the user interface (UI),
+while the Form_Load event is a separate event that occurs after the UI is created but before it is displayed.
