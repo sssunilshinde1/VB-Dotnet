@@ -1,0 +1,76 @@
+Public Class Form1
+    Inherits Form
+
+    ' Declare controls at the class level to be accessible by all methods
+    Private WithEvents Label1 As Label
+    Private WithEvents Label2 As Label
+    Private WithEvents TextBox1 As TextBox
+    Private WithEvents TextBox2 As TextBox
+    Private WithEvents Button1 As Button
+
+    Public Sub New()
+        ' The call to InitializeComponent is required for the designer.
+        ' However, since we are not using the designer, we can put our
+        ' control creation code here or in the Form_Load event.
+        InitializeComponent()
+    End Sub
+
+
+
+    ' The Form_Load event handler is used to create and position the controls
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        ' Maximize the form window
+        Me.WindowState = FormWindowState.Maximized
+        
+        Me.Text = "User Data Entry"
+        Me.Size = New System.Drawing.Size(400, 250)
+
+        ' --- Label 1 Setup ---
+        Label1 = New Label()
+        Label1.Text = "First Name:"
+        Label1.Location = New System.Drawing.Point(20, 20)
+        Label1.AutoSize = True
+        Me.Controls.Add(Label1)
+
+        ' --- TextBox 1 Setup ---
+        TextBox1 = New TextBox()
+        TextBox1.Location = New System.Drawing.Point(100, 20)
+        TextBox1.Size = New System.Drawing.Size(250, 20)
+        Me.Controls.Add(TextBox1)
+
+        ' --- Label 2 Setup ---
+        Label2 = New Label()
+        Label2.Text = "Last Name:"
+        Label2.Location = New System.Drawing.Point(20, 60)
+        Label2.AutoSize = True
+        Me.Controls.Add(Label2)
+
+        ' --- TextBox 2 Setup ---
+        TextBox2 = New TextBox()
+        TextBox2.Location = New System.Drawing.Point(100, 60)
+        TextBox2.Size = New System.Drawing.Size(250, 20)
+        Me.Controls.Add(TextBox2)
+
+        ' --- Button Setup ---
+        Button1 = New Button()
+        Button1.Text = "Show Info"
+        Button1.Location = New System.Drawing.Point(150, 120)
+        Button1.Size = New System.Drawing.Size(90, 30)
+        Me.Controls.Add(Button1)
+    End Sub
+
+    ' The event handler for the button click
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        ' Retrieve text from the text boxes
+        Dim firstName As String = TextBox1.Text
+        Dim lastName As String = TextBox2.Text
+
+        ' Create the message to display in the dialog box
+        Dim message As String = $"Hello {firstName} {lastName}!"
+
+        ' Show a standard message box dialog
+        MessageBox.Show(message, "User Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+End Class
