@@ -1,0 +1,56 @@
+Imports System.Windows.Forms
+
+Public Class Form1
+    Inherits Form
+
+    ' Declare controls manually (no designer in VS Code)
+    Private WithEvents Timer1 As New Timer()
+    Private lblTime As New Label()
+    Private WithEvents btnStartStop As New Button()  ' Added WithEvents here
+
+    ' Variable to track elapsed seconds
+    Private elapsedSeconds As Integer = 0
+
+    Public Sub New()
+        ' Form setup
+        Me.Text = "Timer App"
+        Me.Size = New Size(300, 200)
+
+        ' Label setup
+        lblTime.Text = "Elapsed: 0 seconds"
+        lblTime.Location = New Point(20, 20)
+        lblTime.Size = New Size(200, 30)
+        Me.Controls.Add(lblTime)
+
+        ' Button setup
+        btnStartStop.Text = "Start"
+        btnStartStop.Location = New Point(20, 60)
+        btnStartStop.Size = New Size(100, 40)
+        Me.Controls.Add(btnStartStop)
+
+        ' Timer setup
+        Timer1.Interval = 1000  ' 1 second
+    End Sub
+
+    ' The Form_Load event handler is used to create and position the controls
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Initialization code can be placed here if needed, but it's already in the constructor
+    End Sub
+
+    ' Button click handler
+    Private Sub btnStartStop_Click(sender As Object, e As EventArgs) Handles btnStartStop.Click
+        If Timer1.Enabled Then
+            Timer1.Stop()
+            btnStartStop.Text = "Start"
+        Else
+            Timer1.Start()
+            btnStartStop.Text = "Stop"
+        End If
+    End Sub
+
+    ' Timer tick handler
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        elapsedSeconds += 1
+        lblTime.Text = $"Elapsed: {elapsedSeconds} seconds"
+    End Sub
+End Class
