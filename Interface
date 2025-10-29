@@ -1,0 +1,11 @@
+Public Interface IExample
+    Sub DoSomething()
+End Interface
+
+Public Class MyClass
+    Implements IExample
+
+    Public Sub DoSomething() Implements IExample.DoSomething
+        ' Implementation here
+    End Sub
+End Class
